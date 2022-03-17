@@ -3,16 +3,16 @@ package kr.co.guide.admin.domain;
 import lombok.Data;
 
 @Data
-public class PageDTO {
+public class TourPageDTO {
 	private int startPage;
 	private int endPage;
 	
 	private boolean prev, next;
 	
 	private int total;
-	private Criteria cri;
+	private TourCriteria cri;
 	
-	public PageDTO(Criteria cri, int total) {
+	public TourPageDTO(TourCriteria cri, int total) {
 		this.cri = cri;
 		this.total = total;
 		
