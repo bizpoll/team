@@ -33,10 +33,13 @@ public class ScheduleController {
    }
    
    @PostMapping("/scheduleInsert")
-   public String insert(ScheduleDTO sDto, ScheduleDetailDTO sdDto) throws Exception {
+   public String insert(ScheduleDTO sDto, ScheduleDetailDTO sdDto, String ssss) throws Exception {
 	   logger.info("scheduleInsert post...........");
-	   
-	   sService.sInsert(sDto);
+	   System.out.println(sDto);
+	   System.out.println(sdDto);
+	   System.out.println(ssss);
+	   System.out.println(sDto.getSchedule_start().getClass().getName());
+   //sService.sInsert(sDto);
 //	   sService.sdInsert(sdDto);
 	   
 	   return "redirect:/";
