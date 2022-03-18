@@ -11,7 +11,6 @@
 		AND area_detail_code = #{area_detail_code}
 	</select>
 	
-	
 	<select id="selectAreaList" resultType="kr.co.guide.travel.domain.AreaDTO">
 		SELECT *
 		
