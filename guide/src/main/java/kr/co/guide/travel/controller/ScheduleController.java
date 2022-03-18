@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import kr.co.guide.travel.domain.AreaDTO;
 import kr.co.guide.travel.domain.ScheduleDTO;
 import kr.co.guide.travel.domain.ScheduleDetailDTO;
+import kr.co.guide.travel.domain.TourDTO;
 import kr.co.guide.travel.service.AreaService;
 import kr.co.guide.travel.service.ScheduleService;
 

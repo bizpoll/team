@@ -201,8 +201,10 @@
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		<input type="hidden" name="member_id" value="user1@naver.com">
 		<div class="city pt-2 mb-3">
-		   <h2 class="fw-bold">제주도</h2>
-		   <h5 class="text-secondary">JEJU</h5>
+		<c:forEach items="${area }" var="area">
+		   <h2 class="fw-bold">${area.area_detail_name}</h2>
+		   <h5 class="text-secondary">${area.area_english_title}</h5>
+		</c:forEach>
 		   <div class="mt-3">
 		      <h4 style="font-weight: bold;">
 		         <input type="hidden" id="days">

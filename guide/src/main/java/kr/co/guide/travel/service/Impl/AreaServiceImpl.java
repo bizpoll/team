@@ -39,4 +39,5 @@ public class AreaServiceImpl implements AreaService{
 		 
 		return mapper.selectSearchAreaList(aDto);
 	}
+
 }
