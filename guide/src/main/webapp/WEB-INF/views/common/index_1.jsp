@@ -24,7 +24,7 @@
 <a href="" class="mx-4 search-area" data-code="4">전라도</a> 
 <a href="" class="mx-4 search-area" data-code="5">충청도</a> 
 </div>
-<br>	
+<br>
 	
 				
 <div class="container-fluid">

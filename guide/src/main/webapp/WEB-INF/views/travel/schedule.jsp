@@ -201,8 +201,8 @@
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		<input type="hidden" name="member_id" value="user1@naver.com">
 		<div class="city pt-2 mb-3">
-		   <h2 class="fw-bold">제주도</h2>
-		   <h5 class="text-secondary">JEJU</h5>
+		   <h2 class="fw-bold area_name"></h2>
+		   <h4 class="text-secondary area_english_title"></h4>
 		   <div class="mt-3">
 		      <h4 style="font-weight: bold;">
 		         <input type="hidden" id="days">
@@ -377,29 +377,72 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=84f7824a42d57ad9bcccbdefb2ef0476"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
-   $(".first-tab, .second-tab, .third-tab, .fourth-tab").hide();
+$(function() {
+	// 쿼리스트링 지역코드 가져오기
+	var qs = getQueryStringObject();
+	var code = qs.area_code;
+	var detailCode = qs.area_detail_code;
+	
+	function getQueryStringObject() {
+	    var a = window.location.search.substr(1).split('&');
+	    if (a == "") return {};
+	    var b = {};
+	    for (var i = 0; i < a.length; ++i) {
+	        var p = a[i].split('=', 2);
+	        if (p.length == 1)
+	            b[p[0]] = "";
+	        else
+	            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+	    }
+	    return b;
+	}
+	
+	var area = "${area}";
+	
+	var arr = new Array();
+    <c:forEach items="${area}" var="item">        
+            arr.push({area_code: "${item.area_code}"
+                    , area_detail_code : "${item.area_detail_code}"
+                    , area_english_title : "${item.area_english_title}"
+                    , area_name : "${item.area_name}"
+                    , area_detail_name : "${item.area_detail_name}"
+                    , area_latitude : "${item.area_latitude}"
+                    , area_longitude : "${item.area_longitude}"});
+    </c:forEach>
+    
+    var latitude = null;
+    var longitude = null;
+	
+	for(var i = 0 ; i < arr.length; i ++){    
+           if (arr[i].area_code == code && arr[i].area_detail_code == detailCode) {
+			$("h2.area_name").text(arr[i].area_name + " " + arr[i].area_detail_name);
+			$("h4.area_english_title").text(arr[i].area_english_title);
+         	latitude = arr[i].area_latitude;
+         	longitude = arr[i].area_longitude;
+		}
+       }
    
-   /* ------- 날짜 ------- */
-   $(function() {
-      $(".testDatepicker").datepicker({ 
-         numberOfMonths: 2 , 
-         dateFormat:"yy-mm-dd" , 
-         setDate: 'today',
-         prevText: '이전 달' , 
-         nextText: '다음 달' , 
-         monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'] , 
-         monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'] , 
-         dayNames: ['일', '월', '화', '수', '목', '금', '토'] , 
-         dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'] , 
-         dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'] , 
-         showMonthAfterYear: true , 
-         yearSuffix: '년',
-         showButtonPanel: true,
-         maxDate : "+1m +1w",   
-         minDate : 0,
-         closeText: '닫기'
-      });
-   });
+	$(".first-tab, .second-tab, .third-tab, .fourth-tab").hide();
+
+	/* ------- 날짜 ------- */
+	$(".testDatepicker").datepicker({ 
+		numberOfMonths: 2 , 
+		dateFormat:"yy-mm-dd" , 
+		setDate: 'today',
+		prevText: '이전 달' , 
+		nextText: '다음 달' , 
+		monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'] , 
+		monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'] , 
+		dayNames: ['일', '월', '화', '수', '목', '금', '토'] , 
+		dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'] , 
+		dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'] , 
+		showMonthAfterYear: true , 
+		yearSuffix: '년',
+		showButtonPanel: true,
+		maxDate : "+1m +1w",   
+		minDate : 0,
+		closeText: '닫기'
+	});
       
 	function call() {
 		var sdd = document.getElementById("startDate").value;
@@ -447,46 +490,61 @@
 		return ((to_dt.getTime() - from_dt.getTime()) / 1000 / 60 / 60 / 24) + 1; 
 	}
    
-   /* ------- 드래그앤드롭 ------- */
-   /** UI 설정 */
-   $(function() {
-       $(".itemBoxWrap").sortable({
-           placeholder:"itemBoxHighlight",
-           start: function(event, ui) {
-               ui.item.data('start_pos', ui.item.index());
-           },
-           stop: function(event, ui) {
-               var spos = ui.item.data('start_pos');
-               var epos = ui.item.index();
-            reorder();
-           }
-       });
-       //$("#itemBoxWrap").disableSelection();
-       
-       $( ".sortable" ).sortable();
-       $( ".sortable" ).disableSelection();
-   });
+	/* ------- 드래그앤드롭 ------- */
+	/** UI 설정 */
+	$(function() {
+	    $(".itemBoxWrap").sortable({
+	        placeholder:"itemBoxHighlight",
+	        start: function(event, ui) {
+	            ui.item.data('start_pos', ui.item.index());
+	        },
+	        stop: function(event, ui) {
+	            var spos = ui.item.data('start_pos');
+	            var epos = ui.item.index();
+	         reorder();
+	        }
+	    });
+	    //$("#itemBoxWrap").disableSelection();
+	    
+	    $( ".sortable" ).sortable();
+	    $( ".sortable" ).disableSelection();
+	});
    
-   /** 아이템 순서 조정 */
-   function reorder() {
-       $(".itemBox").each(function(i, box) {
-           $(box).find(".itemNum").val(i + 1);
-       });
-   }
+	/** 아이템 순서 조정 */
+	function reorder() {
+	    $(".itemBox").each(function(i, box) {
+	        $(box).find(".itemNum").val(i + 1);
+	    });
+	}
    
-   $(".deleteBox").on("click", function(event) {
-      $(this).parent().parent().parent().parent(".itemBox").insertBefore(".deletePlace");
-      $(this).prevAll(".bi-info-circle").show();
-      $(this).prev(".addItem").show();
-      $(this).hide();
-      reorder();
-   });
-   
+	$(".deleteBox").on("click", function(event) {
+	   $(this).parent().parent().parent().parent(".itemBox").insertBefore(".deletePlace");
+	   $(this).prevAll(".bi-info-circle").show();
+	   $(this).prev(".addItem").show();
+	   $(this).hide();
+	   reorder();
+	});
+	
+	var arr = new Array();
+    <c:forEach items="${area}" var="item">        
+            arr.push({area_code: "${item.area_code}"
+                    , area_detail_code : "${item.area_detail_code}"
+                    , area_english_title : "${item.area_english_title}"
+                    , area_name : "${item.area_name}"
+                    , area_detail_name : "${item.area_detail_name}"
+                    , area_latitude : "${item.area_latitude}"
+                    , area_longitude : "${item.area_longitude}"});
+    </c:forEach>
+	
+
+ 	console.log("위도 : " + latitude);
+    console.log("경도 : " + longitude);
+    
 	/* ------- 지도 api ------- */
 	var mapContainer = document.getElementById("map"), // 지도를 표시할 div 
 		mapOption = { 
-		    center: new kakao.maps.LatLng(36.30722, 127.57194), // 지도의 중심좌표
-		    level: 6 // 지도의 확대 레벨
+		    center: new kakao.maps.LatLng(latitude, longitude), // 지도의 중심좌표
+		    level: 7 // 지도의 확대 레벨
 	};
 	
 	var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
@@ -547,8 +605,6 @@
 		
 		setMarkers(null);
 		setOverlays(null);
-		
-		console.log(markers.length + ", " + overlays.length);
 		
 		// 생성된 마커/오버레이를 배열에 추가합니다
 	    markers.push(marker);
@@ -778,6 +834,8 @@
 	$(".close").click(function() {
 		$("#myModal").modal("hide");
 	});
+	
+});
 </script>
 </body>
 </html>

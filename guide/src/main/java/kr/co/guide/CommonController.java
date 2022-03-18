@@ -38,7 +38,7 @@ public class CommonController {
 		
 		model.addAttribute("areaList", areaList);
 		
-		return "common/index";
+		return "common/index_2";
 	}
 	
 	@ResponseBody

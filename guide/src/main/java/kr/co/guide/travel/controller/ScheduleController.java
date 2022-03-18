@@ -1,5 +1,7 @@
 package kr.co.guide.travel.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ public class ScheduleController {
    public void scheduling(AreaDTO aDto, Model model) throws Exception {
       logger.info("schedule get...........");
       model.addAttribute("tour", service.tourList(aDto));
+      model.addAttribute("area", service.selectAreaList());
    }
    
    @PostMapping("/scheduleInsert")
@@ -37,7 +40,7 @@ public class ScheduleController {
 	   logger.info("scheduleInsert post...........");
 	   
 	   sService.sInsert(sDto);
-//	   sService.sdInsert(sdDto);
+	  // sService.sdInsert(sdDto);
 	   
 	   return "redirect:/";
    }
