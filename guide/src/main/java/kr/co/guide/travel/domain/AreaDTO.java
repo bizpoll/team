@@ -1,11 +1,7 @@
 package kr.co.guide.travel.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class AreaDTO {
 	private String area_code;
@@ -16,4 +12,6 @@ public class AreaDTO {
 	private String area_name;
 	private String area_detail_name;
 	private int area_count;
+	private double area_latitude; // 위도
+	private double area_longitude; // 경도
 }
