@@ -82,8 +82,8 @@
 					<c:forEach items="${areaList}" var="areaList">
 						<c:if test="${areaList.area_code == 0}">
 							<div class="grid-item metal">
-								<input type="hidden" name="area_code" value="">
-								<input type="hidden" name="area_detail_code">
+								<input type="hidden" id="area_code" name="area_code" value="${areaList.area_code}">
+								<input type="hidden" id="area_detail_code" name="area_detail_code" value="${areaList.area_detail_code}">
 								<img alt="" src="${areaList.area_image}">
 								<div class="grid_hover_area d-flex flex-row justify-content-center align-items-center">
 									<div class="girid_hover_text text-center">
@@ -205,6 +205,15 @@ $(function() {
 		actionForm.attr("action", "/board/read");
 		actionForm.submit();
 	});
+	
+// 	$(".grid-item").on("click", function() {
+// // 		 onclick="location.href ='${contextPath}/travel/schedule?area_code=${areaList.area_code}&area_detail_code=${areaList.area_detail_code}"
+		
+// 		var area_code = $(this).children("#area_code").val();
+// 		var area_detail_code = $(this).children("#area_detail_code").val();
+		
+// // 		alert(area_code + ", " + area_detail_code);
+// 	});
 	
 // 	$(".carousel-item").index(1).addClass("active");
 	alert($(".carousel-item").index(1).html());
