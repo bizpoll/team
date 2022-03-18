@@ -188,11 +188,6 @@
 		});
 		
 		
-		$(".sssss").on("click",function(e){
-			
-			$("#ssss").modal('show');
-		});
-		
 		
 	});
 	

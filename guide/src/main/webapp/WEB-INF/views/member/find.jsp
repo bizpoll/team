@@ -55,12 +55,11 @@
 	$(document).ready(function(){
 		var reg_email = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; <%-- 이메일 유효성 --%>
 		
-		/* $("#btn-send").on("click",function(e){
+		$("#btn-send").on("click",function(e){
 			
 			e.preventDefault();
 			
 			member_id = $("#member_id").val();
-			member_name = $("#member_name").val();
 			
 			if(member_id == ""){
 				fnModal("이메일을 입력해주세요");
@@ -68,23 +67,13 @@
 			} else if(!reg_email.test(member_id)) {
 				fnModal("이메일 형식이 올바르지 않습니다.");
 				return false;
-			} else if(member_name == "") {
-				fnModal("이름을 입력해주세요");
-				return false;
-			}
+			} 
 			
 			$("#form-find").submit();
 			
-		}); */
+		}); 
 		
-		<%-- alert 모달창 --%>
-		function fnModal(e) {
-				
-			$(".modal-body").html(e);
-			if(e != "") {
-				$("#info-modal").modal("show");
-			}
-		};
+	
 		
 	});
 

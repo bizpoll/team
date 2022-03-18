@@ -46,7 +46,18 @@
 <%-- 제이쿼리 3.6 --%> 	
 <script type="text/javascript" src="${contextPath}/resources/js/jquery3.6/jquery-3.6.0.min.js"></script>
 
+<script type="text/javascript">
 
+<%-- 모달 alert 기능 --%>
+function fnModal(e) {
+	
+	$(".modal-body").html(e);
+	if(e != "") {
+		$("#info-modal").modal("show");
+	}
+};
+	
+</script>
 
 
 <title>GOGO</title>

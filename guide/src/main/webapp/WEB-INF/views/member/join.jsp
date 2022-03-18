@@ -32,12 +32,12 @@
 								<span class="fs-6 text-danger" id="span-confirm-member-id">　</span>
 							</div>
 							<div class="form-floating mb-2">
-								<input type="text" class="form-control" id="member_password" name="member_password" placeholder="text" maxlength="20"> 
+								<input type="password" class="form-control" id="member_password" name="member_password" placeholder="text" maxlength="20"> 
 								<label for="member_password">비밀번호(문자,숫자 조합 8~15자)</label>
 								<span class="fs-6 text-danger" id="span-member-password">　</span>
 							</div>
 							<div class="form-floating mb-2">
-								<input type="text" class="form-control" id="confirm_member_password" name="confirm_member_password" placeholder="text" maxlength="20"> 
+								<input type="password" class="form-control" id="confirm_member_password" name="confirm_member_password" placeholder="text" maxlength="20"> 
 								<label for="confirm_member_password">비밀번호 확인</label>
 								<span class="fs-6 text-danger" id="span-confirm-member-password">　</span>
 							</div>
@@ -488,38 +488,6 @@ $(document).ready(function(){
 			});
 		}
 	});
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<%-- 모달 alert 기능 --%>
-	function fnModal(e) {
-		
-		$(".modal-body").html(e);
-		if(e != "") {
-			$("#info-modal").modal("show");
-		}
-	};
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	<%-- 이용약관 --%>
 	$("#link-check1").on("click", function(e){

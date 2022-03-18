@@ -50,17 +50,17 @@
                                 <b>비밀번호</b></h5>
                             </div>
 							<div class="form-floating mb-2">
-								<input type="text" class="form-control" id="member_password" name="member_password"  placeholder="text" maxlength="20" > 
+								<input type="password" class="form-control" id="member_password" name="member_password"  placeholder="text" maxlength="20" > 
 								<label for="member_password">비밀번호</label>
 								<span class="fs-6 text-danger" id="span-member-password">　</span>
 							</div>
 							<div class="form-floating mb-2">
-								<input type="text" class="form-control"  id="new_password" name="new_password"  placeholder="text" maxlength="20" > 
+								<input type="password" class="form-control"  id="new_password" name="new_password"  placeholder="text" maxlength="20" > 
 								<label for="new_password">새 비밀번호</label>
 								<span class="fs-6 text-danger" id="span-new-member-password">　</span>
 							</div>
 							<div class="form-floating mb-2">
-								<input type="text" class="form-control" id="confirm_new_password" name="confirm_new_password"  placeholder="text" maxlength="20"> 
+								<input type="password" class="form-control" id="confirm_new_password" name="confirm_new_password"  placeholder="text" maxlength="20"> 
 								<label for="confirm_new_password">새 비밀번호 확인</label>
 								<span class="fs-6 text-danger" id="span-confirm-new-password">　</span>
 							</div>

@@ -114,14 +114,6 @@
 		
 	});
 	
-	<%-- alert 모달창 --%>
-	function fnModal(e) {
-			
-		$(".modal-body").html(e);
-		if(e != "") {
-			$("#info-modal").modal("show");
-		}
-	};
 
 </script>
 	

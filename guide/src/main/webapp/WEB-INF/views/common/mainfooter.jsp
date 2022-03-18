@@ -42,16 +42,6 @@ $(document).ready(function(){
 		$("#info-modal").modal("show");
 	}
 	
-		
-	
-	
-	function fnModal(e) {
-		
-		$(".modal-body").html(e);
-		if(e != "") {
-			$("#info-modal").modal("show");
-		}
-	};
 	
 	
 });
