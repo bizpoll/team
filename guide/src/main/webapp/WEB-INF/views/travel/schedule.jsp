@@ -199,12 +199,10 @@
 <div class="row g-0">
 	<form action="#" method="post" id="scheduleFrm" class="col-lg-2 text-center p-0" style="height: 100%">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-		<input type="hidden" name="member_id" value="user1@naver.com">
+		<input type="hidden" id="member_id" name="member_id" value="user1@naver.com">
 		<div class="city pt-2 mb-3">
-		<c:forEach items="${area }" var="area">
-		   <h2 class="fw-bold">${area.area_detail_name}</h2>
-		   <h5 class="text-secondary">${area.area_english_title}</h5>
-		</c:forEach>
+			<h2 class="fw-bold area_name"></h2>
+		   	<h4 class="text-secondary area_english_title"></h4>
 		   <div class="mt-3">
 		      <h4 style="font-weight: bold;">
 		         <input type="hidden" id="days">
@@ -379,10 +377,54 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=84f7824a42d57ad9bcccbdefb2ef0476"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
-   $(".first-tab, .second-tab, .third-tab, .fourth-tab").hide();
+ $(function() {
+	// 쿼리스트링 지역코드 가져오기
+	var qs = getQueryStringObject();
+	var code = qs.area_code;
+	var detailCode = qs.area_detail_code;
+	
+	function getQueryStringObject() {
+	    var a = window.location.search.substr(1).split('&');
+	    if (a == "") return {};
+	    var b = {};
+	    for (var i = 0; i < a.length; ++i) {
+	        var p = a[i].split('=', 2);
+	        if (p.length == 1)
+	            b[p[0]] = "";
+	        else
+	            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+	    }
+	    return b;
+	}
+	
+	var area = "${area}";
+	
+	var arr = new Array();
+    <c:forEach items="${area}" var="item">        
+            arr.push({area_code: "${item.area_code}"
+                    , area_detail_code : "${item.area_detail_code}"
+                    , area_english_title : "${item.area_english_title}"
+                    , area_name : "${item.area_name}"
+                    , area_detail_name : "${item.area_detail_name}"
+                    , area_latitude : "${item.area_latitude}"
+                    , area_longitude : "${item.area_longitude}"});
+    </c:forEach>
+    
+    var latitude = null;
+    var longitude = null;
+	
+	for(var i = 0 ; i < arr.length; i ++){    
+           if (arr[i].area_code == code && arr[i].area_detail_code == detailCode) {
+			$("h2.area_name").text(arr[i].area_name + " " + arr[i].area_detail_name);
+			$("h4.area_english_title").text(arr[i].area_english_title);
+         	latitude = arr[i].area_latitude;
+         	longitude = arr[i].area_longitude;
+		}
+	}
    
+ 	$(".first-tab, .second-tab, .third-tab, .fourth-tab").hide();
+
    /* ------- 날짜 ------- */
-   $(function() {
       $(".testDatepicker").datepicker({ 
          numberOfMonths: 2 , 
          dateFormat:"yy-mm-dd" , 
@@ -424,26 +466,26 @@
         var to_dt = new Date(end_dt[0], end_dt[1], end_dt[2]);
         
         var days = ((to_dt.getTime() - from_dt.getTime()) / 1000 / 60 / 60 / 24) + 1;
-		document.getElementById("days").setAttribute("value", days);
 		if (days < 1 || days > 4) {
 			alert("최소 당일, 최대 3박 4일까지 날짜를 선택할 수 있습니다.");
 			return false;
 		} else {
+		document.getElementById("days").setAttribute("value", days);
 			document.getElementById("daysLabel").innerText = days;
 		}
        
-		if (days == 1) {
-			$(".first-tab").show();
-			$(".second-tab, .third-tab, .fourth-tab").hide();
-		} else if (days == 2) {
-			$(".first-tab, .second-tab").show();
-			$(".third-tab, .fourth-tab").hide();
-		} else if (days == 3) {
-			$(".first-tab, .second-tab, .third-tab").show();
-			$(".fourth-tab").hide();
-		} else if (days >= 4) {
-			$(".first-tab, .second-tab, .third-tab, .fourth-tab").show();
-		}
+ 		if (days == 1) {
+ 			$(".first-tab").show();
+ 			$(".second-tab, .third-tab, .fourth-tab").hide();
+ 		} else if (days == 2) {
+ 			$(".first-tab, .second-tab").show();
+ 			$(".third-tab, .fourth-tab").hide();
+ 		} else if (days == 3) {
+ 			$(".first-tab, .second-tab, .third-tab").show();
+ 			$(".fourth-tab").hide();
+ 		} else if (days >= 4) {
+ 			$(".first-tab, .second-tab, .third-tab, .fourth-tab").show();
+ 		}
         
 		var appendHtml = "";
 		return ((to_dt.getTime() - from_dt.getTime()) / 1000 / 60 / 60 / 24) + 1; 
@@ -688,10 +730,106 @@
 	    }            
 	}
 	
-	$(".scheduleBtn").click(function() {
-		$("#scheduleFrm").attr("action", "${contextPath}/travel/scheduleInsert");
-		$("#scheduleFrm").submit();
+	//==============================================================================================================================================
+	
+	$(document).ready(function(){
+		var csrf_headername = "${_csrf.headerName}"; 
+		var csrf_token = "${_csrf.token}"; 
+		
+		$(".scheduleBtn").click(function() {
+ 			var startDate = $("#startDate").val();
+			var endDate = $("#endDate").val();
+			var member_id = $("#member_id").val();
+			var schedule_no;
+			
+			var form = {schedule_start : startDate, schedule_end : endDate, member_id : member_id};
+			
+			var len = $("#scheduleFrm").find("[name='tour_no']").length;
+	 		let frmArray = new Array();	 //저장 일정 데이터
+			
+			$.ajax({
+				type : "post",
+				data : JSON.stringify(form),
+				dataType : "text",
+				url : "${contextPath}/travel/scheduleInsert",
+				processData : true,                                                      
+				contentType: "application/json; charset-utf-8", 
+				beforeSend : function(xhr) {
+			        xhr.setRequestHeader(csrf_headername, csrf_token);
+			    },
+				success : function(data) {
+					console.log("성공");
+					schedule_no = data;
+					for(let i = 0; i < len; i++){
+		    			let frmObj = new Object();
+						frmObj.schedule_day = $("#scheduleFrm").find("[name='schedule_day']")[i].value;
+						frmObj.schedule_order = $("#scheduleFrm").find("[name='schedule_order']")[i].value;
+						frmObj.tour_no = $("#scheduleFrm").find("[name='tour_no']")[i].value;
+						frmObj.schedule_no = schedule_no;
+						
+						frmArray.push(frmObj);		
+						$.ajax({
+							type : "post",
+							data : JSON.stringify(frmObj),
+							dataType : "text",
+							url : "${contextPath}/travel/sdInsert",
+							processData : true,                                                      
+							contentType: "application/json; charset-utf-8", 
+							beforeSend : function(xhr) {
+						        xhr.setRequestHeader(csrf_headername, csrf_token);
+						    },
+							success : function() {
+								console.log("성공");
+							},
+							error : function(request, error) {         
+								console.log("에러");
+						    },
+						});
+					} 
+					
+					alert("일정이 저장되었습니다.");
+					location.href= "${contextPath}";
+				},
+				error : function(request, error) {    
+					console.log("에러");
+			        //alert("에러"); 
+			       //alert("status : " + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+			    },
+			}); 
+			
+			
+			
+/* 	  	    $("#scheduleFrm").attr("action", "${contextPath}/travel/scheduleInsert");
+			$("#scheduleFrm").submit();  */
+			
+			});
+	    
 	});
+	
+	var area = "${area}";
+	   
+	   var arr = new Array();
+	    <c:forEach items="${area}" var="item">        
+	            arr.push({area_code: "${item.area_code}"
+	                    , area_detail_code : "${item.area_detail_code}"
+	                    , area_english_title : "${item.area_english_title}"
+	                    , area_name : "${item.area_name}"
+	                    , area_detail_name : "${item.area_detail_name}"
+	                    , area_latitude : "${item.area_latitude}"
+	                    , area_longitude : "${item.area_longitude}"});
+	    </c:forEach>
+	    
+	    var latitude = null;
+	    var longitude = null;
+	   
+	   for(var i = 0 ; i < arr.length; i ++){    
+	           if (arr[i].area_code == code && arr[i].area_detail_code == detailCode) {
+	         $("h2.area_name").text(arr[i].area_name + " " + arr[i].area_detail_name);
+	         $("h4.area_english_title").text(arr[i].area_english_title);
+	            latitude = arr[i].area_latitude;
+	            longitude = arr[i].area_longitude;
+	      }
+	   }
    
    /* ------- 검색부분 ------- */
 	$('ul.tabs li').click(function(){
