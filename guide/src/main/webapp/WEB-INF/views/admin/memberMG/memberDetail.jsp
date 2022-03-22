@@ -36,7 +36,7 @@
 	                                    	회원
 	                                    </c:if>
 	                                    <c:if test="${auth.getMember_authority() == 'ROLE_ADMIN' }">
-	                                    	, 관리자
+	                                    	관리자, 
 	                                    </c:if>
 	                                    </c:forEach>
 	                                    </td></tr>

@@ -746,63 +746,66 @@
 			
 			var len = $("#scheduleFrm").find("[name='tour_no']").length;
 	 		let frmArray = new Array();	 //저장 일정 데이터
-			
-			$.ajax({
-				type : "post",
-				data : JSON.stringify(form),
-				dataType : "text",
-				url : "${contextPath}/travel/scheduleInsert",
-				processData : true,                                                      
-				contentType: "application/json; charset-utf-8", 
-				beforeSend : function(xhr) {
-			        xhr.setRequestHeader(csrf_headername, csrf_token);
-			    },
-				success : function(data) {
-					console.log("성공");
-					schedule_no = data;
-					for(let i = 0; i < len; i++){
-		    			let frmObj = new Object();
-						frmObj.schedule_day = $("#scheduleFrm").find("[name='schedule_day']")[i].value;
-						frmObj.schedule_order = $("#scheduleFrm").find("[name='schedule_order']")[i].value;
-						frmObj.tour_no = $("#scheduleFrm").find("[name='tour_no']")[i].value;
-						frmObj.schedule_no = schedule_no;
+	 		
+	 		if (startDate == "") {
+				alert("출발일 선택");
+			}else if (endDate == "") {
+				alert("도착일 선택");
+			}else if (member_id == "" ) {
+				alert("로그인 필요")
+			}else {	
+				alert($("#scheduleFrm").find("[name='schedule_day']")[0].value);
+				$.ajax({
+					type : "post",
+					data : JSON.stringify(form),
+					dataType : "text",
+					url : "${contextPath}/travel/scheduleInsert",
+					processData : true,                                                      
+					contentType: "application/json; charset-utf-8", 
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(csrf_headername, csrf_token);
+				    },
+					success : function(data) {
+						console.log("성공");
+						schedule_no = data;
+						for(let i = 0; i < len; i++){
+			    			let frmObj = new Object();
+							frmObj.schedule_day = $("#scheduleFrm").find("[name='schedule_day']")[i].value;
+							frmObj.schedule_order = $("#scheduleFrm").find("[name='schedule_order']")[i].value;
+							frmObj.tour_no = $("#scheduleFrm").find("[name='tour_no']")[i].value;
+							frmObj.schedule_no = schedule_no;
+							
+							frmArray.push(frmObj);		
+							$.ajax({
+								type : "post",
+								data : JSON.stringify(frmObj),
+								dataType : "text",
+								url : "${contextPath}/travel/sdInsert",
+								processData : true,                                                      
+								contentType: "application/json; charset-utf-8", 
+								beforeSend : function(xhr) {
+							        xhr.setRequestHeader(csrf_headername, csrf_token);
+							    },
+								success : function() {
+									console.log("성공");
+								},
+								error : function(request, error) {         
+									console.log("에러");
+							    },
+							});
+						} 
 						
-						frmArray.push(frmObj);		
-						$.ajax({
-							type : "post",
-							data : JSON.stringify(frmObj),
-							dataType : "text",
-							url : "${contextPath}/travel/sdInsert",
-							processData : true,                                                      
-							contentType: "application/json; charset-utf-8", 
-							beforeSend : function(xhr) {
-						        xhr.setRequestHeader(csrf_headername, csrf_token);
-						    },
-							success : function() {
-								console.log("성공");
-							},
-							error : function(request, error) {         
-								console.log("에러");
-						    },
-						});
-					} 
-					
-					alert("일정이 저장되었습니다.");
-					location.href= "${contextPath}";
-				},
-				error : function(request, error) {    
-					console.log("에러");
-			        //alert("에러"); 
-			       //alert("status : " + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-			    },
-			}); 
+						alert("일정이 저장되었습니다.");
+						location.href= "${contextPath}";
+					},
+					error : function(request, error) {    
+						console.log("에러");
+				    },
+				}); 
+			}	 		
 			
 			
-			
-/* 	  	    $("#scheduleFrm").attr("action", "${contextPath}/travel/scheduleInsert");
-			$("#scheduleFrm").submit();  */
-			
-			});
+		});
 	    
 	});
 	

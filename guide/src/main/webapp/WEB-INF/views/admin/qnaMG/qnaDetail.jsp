@@ -31,7 +31,19 @@
 	                                        <td>문의글 번호: ${qnaDetail.qna_no}</td>
 	                                    </tr>
 	                                	<tr>
-	                                        <td>제목: ${qnaDetail.qna_title}</td>
+	                                		<td>제목:  
+	                                        <c:choose>
+	                                        	<c:when test="${qnaDetail.qna_title == '1'}">
+	                                        	계정 문의
+	                                        	</c:when>
+	                                        	<c:when test="${qnaDetail.qna_title == '2'}">
+	                                        	일정 문의
+	                                        	</c:when>
+	                                        	<c:when test="${qnaDetail.qna_title == '3'}">
+	                                        	기타 문의
+	                                        	</c:when>
+	                                        </c:choose>
+	                                        </td>
 	                                    </tr>
 	                                	<tr>
 	                                        <td>작성자 아이디: ${qnaDetail.qna_write}</td>

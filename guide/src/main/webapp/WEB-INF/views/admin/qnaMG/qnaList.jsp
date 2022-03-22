@@ -52,7 +52,7 @@ label {
 							<select name="type" id="type" class="form-control form-control-sm" aria-controls="dataTable" style="width: 10%;">
 								<option selected value="QTEN" <c:out value="${pageMaker.cri.type == 'QTEN' ? 'selected' : ''}" />>--------</option>
 								<option value="Q" <c:out value="${pageMaker.cri.type == 'Q' ? 'selected' : ''}" />>글 번호</option>
-								<option value="T" <c:out value="${pageMaker.cri.type == 'T' ? 'selected' : ''}" />>제목</option>
+								<%-- <option value="T" <c:out value="${pageMaker.cri.type == 'T' ? 'selected' : ''}" />>제목</option> --%>
 								<option value="E" <c:out value="${pageMaker.cri.type == 'E' ? 'selected' : ''}" />>아이디</option>
 								<option value="N" <c:out value="${pageMaker.cri.type == 'N' ? 'selected' : ''}" />>이름</option>
 							</select>
@@ -106,7 +106,19 @@ label {
 										<c:forEach items="${qnaMGList }" var="qnaDto">
 	                                	<tr class="qnaDto" onclick="detail(${qnaDto.qna_no});">
 	                                        <td>${qnaDto.qna_no}</td>
-	                                        <td>${qnaDto.qna_title }</td>
+	                                        <td>
+	                                        <c:choose>
+	                                        	<c:when test="${qnaDto.qna_title == '1'}">
+	                                        	계정 문의
+	                                        	</c:when>
+	                                        	<c:when test="${qnaDto.qna_title == '2'}">
+	                                        	일정 문의
+	                                        	</c:when>
+	                                        	<c:when test="${qnaDto.qna_title == '3'}">
+	                                        	기타 문의
+	                                        	</c:when>
+	                                        </c:choose>
+	                                        </td>
 	                                        <td>${qnaDto.qna_write}</td>
 	                                        <td>${qnaDto.qna_write_name}</td>
 	                                        <td>${qnaDto.qna_regist_date }</td>
